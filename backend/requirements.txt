@@ -7,4 +7,4 @@ python-dotenv==1.0.0
 passlib[bcrypt]==1.7.4
 supabase==2.3.0
 requests==2.31.0
-pydantic-core==2.14.0
+pydantic-core==2.39.0
