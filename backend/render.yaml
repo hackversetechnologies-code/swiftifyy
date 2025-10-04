@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: swiftifyy-backend
+    env: python
+    plan: free
+    # Set your working directory if backend is inside a subfolder
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
