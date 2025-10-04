@@ -10,8 +10,8 @@ from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
 import smtplib
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import requests
 import asyncio
 import json
@@ -29,7 +29,7 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # Add your frontend URLs
+    allow_origins=["https://swiftifydel.netlify.app/"],  # Add your frontend URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -143,11 +143,11 @@ def send_email_notification(to_email: str, subject: str, body: str) -> bool:
         if not all([smtp_host, smtp_user, smtp_password]):
             return False
             
-        msg = MimeMultipart()
+        msg = MIMEMultipart()
         msg['From'] = smtp_user
         msg['To'] = to_email
         msg['Subject'] = subject
-        msg.attach(MimeText(body, 'html'))
+        msg.attach(MIMEText(body, 'html'))
         
         server = smtplib.SMTP(smtp_host, smtp_port)
         server.starttls()
@@ -350,7 +350,7 @@ async def schedule_delivery(request: ScheduleRequest):
             <p><strong>From:</strong> {request.sender.name}</p>
             <p><strong>To:</strong> {request.receiver.name}</p>
             <p><strong>Estimated Cost:</strong> ${estimated_cost}</p>
-            <p>Track your package at: <a href="https://swiftify.com/track?id={tracking_id}">Track Now</a></p>
+            <p>Track your package at: <a href="https://swiftifydel.netlify.app/track?id={tracking_id}">Track Now</a></p>
             """
             send_email_notification(request.sender.email, email_subject, email_body)
         
