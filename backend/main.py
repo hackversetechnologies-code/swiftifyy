@@ -29,7 +29,7 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://swiftifydel.netlify.app/", "http://localhost:5173", "http://127.0.0.1:5173"],  # Add your frontend URLs and localhost for development
+    allow_origins=["https://swiftifydel.netlify.app", "http://localhost:5173", "http://127.0.0.1:5173"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
