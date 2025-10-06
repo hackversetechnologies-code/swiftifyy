@@ -502,9 +502,11 @@ async def track_parcel(tracking_id: str):
 @app.post("/api/admin/login")
 async def admin_login(request: AdminLoginRequest):
     """Admin login"""
-    key_hash = hashlib.sha256(request.key.encode()).hexdigest()
+    key = request.key.strip()
+    key_hash = hashlib.sha256(key.encode()).hexdigest()
 
     if key_hash != ADMIN_KEY_HASH:
+        print(f"DEBUG: Received key hash: {key_hash[:16]}... Expected: {ADMIN_KEY_HASH[:16]}...")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid admin key"
