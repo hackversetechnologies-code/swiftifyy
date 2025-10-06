@@ -496,7 +496,7 @@ async def track_parcel(tracking_id: str):
 @app.post("/api/admin/login")
 async def admin_login(request: AdminLoginRequest):
     """Admin login"""
-    key = request.key.strip()
+    key = request.key.strip().strip('"')
 
     if key != ADMIN_KEY:
         print(f"DEBUG: Received key: '{key[:10]}...' Expected: '{ADMIN_KEY[:10]}...'")
