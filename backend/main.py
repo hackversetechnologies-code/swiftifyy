@@ -39,7 +39,7 @@ app.add_middleware(
 security = HTTPBearer()
 SECRET_KEY = os.getenv("SECRET_KEY", "SwiftifyLogistics2025!@#$%^&*()_+SecureAdminKey789XYZ")
 # Read admin key from environment with proper fallback
-ADMIN_KEY = os.getenv("ADMIN_KEY", "SwiftifyAdmin2025!ComplexSecureKey#$%789XYZLogistics")
+ADMIN_KEY = os.getenv("ADMIN_KEY", "SwiftifyAdmin2025!ComplexSecureKey#$%789XYZLogistics").strip().strip('"')
 print(f"DEBUG: Using ADMIN_KEY: '{ADMIN_KEY[:10]}...'")
 
 # Optional services configuration
@@ -499,7 +499,13 @@ async def admin_login(request: AdminLoginRequest):
     key = request.key.strip().strip('"')
 
     if key != ADMIN_KEY:
-        print(f"DEBUG: Received key: '{key[:10]}...' Expected: '{ADMIN_KEY[:10]}...'")
+        print(f"DEBUG FULL: Received len={len(key)}, repr={repr(key)}")
+        print(f"DEBUG FULL: Expected len={len(ADMIN_KEY)}, repr={repr(ADMIN_KEY)}")
+        diff_pos = next((i for i in range(min(len(key), len(ADMIN_KEY))) if key[i] != ADMIN_KEY[i]), -1)
+        if diff_pos != -1:
+            print(f"DEBUG FULL: First diff at pos {diff_pos}: received '{key[diff_pos]}' vs expected '{ADMIN_KEY[diff_pos]}'")
+        else:
+            print(f"DEBUG FULL: No diff found in common length, lengths differ: {len(key)} vs {len(ADMIN_KEY)}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid admin key"
