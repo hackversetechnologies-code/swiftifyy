@@ -29,7 +29,7 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://swiftifydel.netlify.app", "http://localhost:5173", "http://127.0.0.1:5173"], 
+    allow_origins=["https://swiftifydel.netlify.app", "http://localhost:5173", "http://127.0.0.1:5173"],  # Add your frontend URLs and localhost for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -495,13 +495,13 @@ async def track_parcel(tracking_id: str):
 async def admin_login(request: AdminLoginRequest):
     """Admin login"""
     key_hash = hashlib.sha256(request.key.encode()).hexdigest()
-    
+
     if key_hash != ADMIN_KEY_HASH:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid admin key"
         )
-    
+
     token = create_jwt_token({"admin": True})
     return {"token": token}
 
