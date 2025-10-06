@@ -38,7 +38,15 @@ app.add_middleware(
 # Security
 security = HTTPBearer()
 SECRET_KEY = os.getenv("SECRET_KEY", "SwiftifyLogistics2025!@#$%^&*()_+SecureAdminKey789XYZ")
-ADMIN_KEY_HASH = hashlib.sha256(os.getenv("ADMIN_KEY", "SwiftifyAdmin2025!ComplexSecureKey#$%789XYZLogistics").encode()).hexdigest()
+# Read admin key from environment with proper fallback
+admin_key_env = os.getenv("ADMIN_KEY")
+if admin_key_env:
+    ADMIN_KEY_HASH = hashlib.sha256(admin_key_env.encode()).hexdigest()
+    print(f"DEBUG: Using ADMIN_KEY from environment: '{admin_key_env[:10]}...' (hash: {ADMIN_KEY_HASH[:16]}...)")
+else:
+    default_key = "SwiftifyAdmin2025!ComplexSecureKey#$%789XYZLogistics"
+    ADMIN_KEY_HASH = hashlib.sha256(default_key.encode()).hexdigest()
+    print(f"DEBUG: Using default ADMIN_KEY (hash: {ADMIN_KEY_HASH[:16]}...)")
 
 # Optional services configuration
 ENABLE_EMAIL = os.getenv("ENABLE_EMAIL_NOTIFICATIONS", "false").lower() == "true"
